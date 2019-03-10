@@ -54,6 +54,7 @@
                                 <v-list-tile-title>Permissions</v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
+                        
                     </v-list-group>
 
         <v-list-tile to="admin/settings">

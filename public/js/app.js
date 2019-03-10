@@ -27766,6 +27766,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -27845,7 +27846,181 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      dialog: false,
+      headers: [{
+        text: 'Name',
+        value: 'name'
+      }, {
+        text: 'Permissions',
+        value: 'created_at'
+      }, {
+        text: 'Actions',
+        value: 'name',
+        sortable: false
+      }],
+      tableData: [],
+      editedIndex: -1,
+      allPermissions: [],
+      editedItem: {
+        name: '',
+        created_at: ''
+      },
+      defaultItem: {
+        name: '',
+        created_at: ''
+      }
+    };
+  },
+  computed: {
+    formTitle: function formTitle() {
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+    }
+  },
+  watch: {
+    dialog: function dialog(val) {
+      val || this.close();
+    }
+  },
+  created: function created() {
+    this.initialize();
+  },
+  methods: {
+    initialize: function initialize() {
+      var _this = this;
+
+      axios.get('/api/roles').then(function (response) {
+        _this.tableData = response.data.data;
+      });
+      axios.get('/api/permissions').then(function (response) {
+        return _this.allPermissions = response.data.data;
+      });
+    },
+    editItem: function editItem(item) {
+      this.editedIndex = this.tableData.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem: function deleteItem(item) {
+      var index = this.tableData.indexOf(item);
+      confirm('Are you sure you want to delete this item?') && this.tableData.splice(index, 1);
+      axios.delete('/api/roles/' + item.id).then(function (response) {
+        return console.log(response.data);
+      });
+    },
+    close: function close() {
+      var _this2 = this;
+
+      this.dialog = false;
+      setTimeout(function () {
+        _this2.editedItem = Object.assign({}, _this2.defaultItem);
+        _this2.editedIndex = -1;
+      }, 300);
+    },
+    save: function save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.tableData[this.editedIndex], this.editedItem);
+        axios.put('/api/roles/' + this.editedItem.id, this.editedItem).then(function (response) {
+          return console.log(response.data);
+        });
+      } else {
+        this.tableData.push(this.editedItem);
+        axios.post('/api/roles/', this.editedItem).then(function (response) {
+          return console.log(response.data);
+        });
+      }
+
+      this.close();
+    }
+  }
+});
 
 /***/ }),
 
@@ -27874,9 +28049,99 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      dialog: false,
       headers: [{
         text: 'Name',
         value: 'name'
@@ -27894,7 +28159,24 @@ __webpack_require__.r(__webpack_exports__);
         value: 'name',
         sortable: false
       }],
-      tableData: []
+      tableData: [],
+      editedIndex: -1,
+      allRoles: [],
+      allPermissions: [],
+      editedItem: {
+        name: '',
+        email: '',
+        role: {},
+        permissions: [],
+        created_at: ''
+      },
+      defaultItem: {
+        name: '',
+        email: '',
+        role: {},
+        permissions: [],
+        created_at: ''
+      }
     };
   },
   computed: {
@@ -27902,16 +28184,56 @@ __webpack_require__.r(__webpack_exports__);
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
     }
   },
+  watch: {
+    dialog: function dialog(val) {
+      val || this.close;
+    }
+  },
   created: function created() {
     this.initialize();
   },
   methods: {
     initialize: function initialize() {
+      axios.get('api/users').then(function (response) {
+        /*this.tableData = response.data.data;*/
+        console.log(response);
+      });
+    },
+    editItem: function editItem(item) {
+      this.editedIndex = this.tableData.indexOf(item);
+      this.editItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem: function deleteItem(item) {
+      var index = this.tableData.indexOf(item);
+      confirm('Are you sure you want to delete this item?') && this.tableData.splice(index, 1);
+      axios.delete('/api/users/' + item.id).then(function (response) {
+        return console.log(response.data);
+      });
+    },
+    close: function close() {
       var _this = this;
 
-      axios.get('api/users').then(function (response) {
-        _this.tableData = response.data.data;
-      });
+      this.dialog = false;
+      setTimeout(function () {
+        _this.editedItem = Object.assign({}, _this.defaultItem);
+        _this.editedIndex = -1;
+      }, 300);
+    },
+    save: function save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.tableData[this.editedIndex], this.editedItem);
+        axios.put('api/users/' + this.editedItem.id, this.editedItem).then(function (response) {
+          return console.log(response.data);
+        });
+      } else {
+        this.tableData.push(this.editedItem);
+        axios.post('/api/users/', this.editedItem).then(function (response) {
+          return console.log(response.data);
+        });
+      }
+
+      this.close();
     }
   }
 });
@@ -63919,7 +64241,261 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("h1", [_vm._v("Test ")])
+  return _c(
+    "div",
+    [
+      _c(
+        "v-toolbar",
+        { attrs: { dark: "", flat: "", color: "grey-lighten" } },
+        [
+          _c("v-toolbar-title", [_vm._v("Roles")]),
+          _vm._v(" "),
+          _c("v-divider", {
+            staticClass: "mx-2",
+            attrs: { inset: "", vertical: "" }
+          }),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "700px" },
+              model: {
+                value: _vm.dialog,
+                callback: function($$v) {
+                  _vm.dialog = $$v
+                },
+                expression: "dialog"
+              }
+            },
+            [
+              _c(
+                "v-btn",
+                {
+                  staticClass: "mb-2",
+                  attrs: { slot: "activator", color: "primary", dark: "" },
+                  slot: "activator"
+                },
+                [_vm._v("New Item")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v(_vm._s(_vm.formTitle))
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "v-container",
+                        { attrs: { "grid-list-md": "" } },
+                        [
+                          _c(
+                            "v-layout",
+                            { attrs: { wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "Name" },
+                                    model: {
+                                      value: _vm.editedItem.name,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.editedItem, "name", $$v)
+                                      },
+                                      expression: "editedItem.name"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "" } },
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.allPermissions,
+                                      label: "Permissions",
+                                      "item-text": "name",
+                                      "return-object": "",
+                                      multiple: "",
+                                      chips: ""
+                                    },
+                                    model: {
+                                      value: _vm.editedItem.permissions,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editedItem,
+                                          "permissions",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editedItem.permissions"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", flat: "" },
+                          on: { click: _vm.close }
+                        },
+                        [_vm._v("Cancel")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", flat: "" },
+                          on: { click: _vm.save }
+                        },
+                        [_vm._v("Save")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-data-table",
+        {
+          staticClass: "elevation-1",
+          attrs: { headers: _vm.headers, items: _vm.tableData },
+          scopedSlots: _vm._u([
+            {
+              key: "items",
+              fn: function(props) {
+                return [
+                  _c("td", [_vm._v(_vm._s(props.item.name))]),
+                  _vm._v(" "),
+                  props.item.permissions
+                    ? _c(
+                        "td",
+                        { staticStyle: { width: "40%" } },
+                        _vm._l(props.item.permissions, function(
+                          permission,
+                          index
+                        ) {
+                          return _c(
+                            "v-chip",
+                            {
+                              key: index,
+                              attrs: {
+                                small: "",
+                                color: "primary",
+                                "text-color": "white"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                    " +
+                                  _vm._s(permission.name) +
+                                  "\n                "
+                              )
+                            ]
+                          )
+                        }),
+                        1
+                      )
+                    : _c("td", [_vm._v("n/a")]),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    { staticClass: "justify-center layout px-0" },
+                    [
+                      _c(
+                        "v-icon",
+                        {
+                          staticClass: "mr-2",
+                          attrs: { small: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.editItem(props.item)
+                            }
+                          }
+                        },
+                        [_vm._v("\n                    edit\n                ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-icon",
+                        {
+                          attrs: { small: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteItem(props.item)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    delete\n                "
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ]
+              }
+            }
+          ])
+        },
+        [
+          _vm._v(" "),
+          _c(
+            "template",
+            { slot: "no-data" },
+            [
+              _c(
+                "v-btn",
+                { attrs: { color: "primary" }, on: { click: _vm.initialize } },
+                [_vm._v("Reset")]
+              )
+            ],
+            1
+          )
+        ],
+        2
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -63943,40 +64519,334 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-data-table", {
-    staticClass: "elevation-1",
-    attrs: { headers: _vm.headers, items: _vm.desserts },
-    scopedSlots: _vm._u([
-      {
-        key: "items",
-        fn: function(props) {
-          return [
-            _c("td", [_vm._v(_vm._s(props.item.name))]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-xs-right" }, [
-              _vm._v(_vm._s(props.item.calories))
-            ]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-xs-right" }, [
-              _vm._v(_vm._s(props.item.fat))
-            ]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-xs-right" }, [
-              _vm._v(_vm._s(props.item.carbs))
-            ]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-xs-right" }, [
-              _vm._v(_vm._s(props.item.protein))
-            ]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-xs-right" }, [
-              _vm._v(_vm._s(props.item.iron))
-            ])
-          ]
-        }
-      }
-    ])
-  })
+  return _c(
+    "div",
+    [
+      _c(
+        "v-toolbar",
+        { attrs: { dark: "", flat: "", color: "grey-lighten" } },
+        [
+          _c("v-toolbar-title", [_vm._v("Users")]),
+          _vm._v(" "),
+          _c("v-divider", {
+            staticClass: "mx-2",
+            attrs: { inset: "", vertical: "" }
+          }),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "700px" },
+              model: {
+                value: _vm.dialog,
+                callback: function($$v) {
+                  _vm.dialog = $$v
+                },
+                expression: "dialog"
+              }
+            },
+            [
+              _c(
+                "v-btn",
+                {
+                  staticClass: "mb-2",
+                  attrs: { slot: "activator", color: "primary", dark: "" },
+                  slot: "activator"
+                },
+                [_vm._v("New Item")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v(_vm._s(_vm.formTitle))
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "v-container",
+                        { attrs: { "grid-list-md": "" } },
+                        [
+                          _c(
+                            "v-layout",
+                            { attrs: { wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "Name" },
+                                    model: {
+                                      value: _vm.editedItem.name,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.editedItem, "name", $$v)
+                                      },
+                                      expression: "editedItem.name"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "Email" },
+                                    model: {
+                                      value: _vm.editedItem.email,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.editedItem, "email", $$v)
+                                      },
+                                      expression: "editedItem.email"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "password" },
+                                    model: {
+                                      value: _vm.editedItem.password,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editedItem,
+                                          "password",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editedItem.password"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "Confirm Password" },
+                                    model: {
+                                      value: _vm.editedItem.confirm_password,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editedItem,
+                                          "confirm_password",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editedItem.confirm_password"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "" } },
+                                [
+                                  _c("h3", [_vm._v("Roles")]),
+                                  _vm._v(" "),
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.allRoles,
+                                      label: "Roles",
+                                      "item-text": "name",
+                                      "return-object": "",
+                                      chips: ""
+                                    },
+                                    model: {
+                                      value: _vm.editedItem.role,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.editedItem, "role", $$v)
+                                      },
+                                      expression: "editedItem.role"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "" } },
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.allPermissions,
+                                      label: "Permissions",
+                                      "item-text": "name",
+                                      "return-object": "",
+                                      multiple: "",
+                                      chips: ""
+                                    },
+                                    model: {
+                                      value: _vm.editedItem.permissions,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editedItem,
+                                          "permissions",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editedItem.permissions"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", flat: "" },
+                          on: { click: _vm.close }
+                        },
+                        [_vm._v("Cancel")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", flat: "" },
+                          on: { click: _vm.save }
+                        },
+                        [_vm._v("Save")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-data-table",
+        {
+          staticClass: "elevation-1",
+          attrs: { headers: _vm.headers, items: _vm.tableData },
+          scopedSlots: _vm._u([
+            {
+              key: "items",
+              fn: function(props) {
+                return [
+                  _c("td", [_vm._v(_vm._s(props.item.name))]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "text-xs-right" }, [
+                    _vm._v(_vm._s(props.item.email))
+                  ]),
+                  _vm._v(" "),
+                  props.item.role
+                    ? _c("td", { staticClass: "text-xs-right" }, [
+                        _vm._v(_vm._s(props.item.role.name))
+                      ])
+                    : _c("td", { staticClass: "text-xs-right" }, [
+                        _vm._v("n/a")
+                      ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "text-xs-right" }, [
+                    _vm._v(_vm._s(props.item.created_at))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    { staticClass: "justify-center layout px-0" },
+                    [
+                      _c(
+                        "v-icon",
+                        {
+                          staticClass: "mr-2",
+                          attrs: { small: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.editItem(props.item)
+                            }
+                          }
+                        },
+                        [_vm._v("\n                    edit\n                ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-icon",
+                        {
+                          attrs: { small: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteItem(props.item)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    delete\n                "
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ]
+              }
+            }
+          ])
+        },
+        [
+          _vm._v(" "),
+          _c(
+            "template",
+            { slot: "no-data" },
+            [
+              _c(
+                "v-btn",
+                { attrs: { color: "primary" }, on: { click: _vm.initialize } },
+                [_vm._v("Reset")]
+              )
+            ],
+            1
+          )
+        ],
+        2
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -79395,8 +80265,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laragon\www\laravelspatie\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laragon\www\laravelspatie\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\clinicdashboard\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\clinicdashboard\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

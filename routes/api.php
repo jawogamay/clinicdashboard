@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('users', 'AdminApi\UserController');
+Route::apiResource('permissions','AdminApi\RolesController');
+Route::apiResource('roles','AdminApi\PermissionsController');
